@@ -8,7 +8,7 @@ int rec(int sizen, int dep, int sum) {
         if(sum+array[i]==exps)
             return 0;
         if(sum+array[i]>exps)
-            return 1;
+            continue;
         if(dep) {
             ret = rec(i+1, dep-1, sum+array[i]);
             if(!ret)
@@ -30,13 +30,13 @@ bool canPartition(int* nums, int numsSize) {
                 array[i] = array[j];
                 array[j] = temp;
             }
-    //for(i=0;i<numsSize;i++)
-    //    printf("%d ",array[i]);
     for(i=0; i<numsSize; i++)
         sum += nums[i];
     if(sum & 1)
         return false;
     exps = sum/2;
+    if(array[0] > exps)
+        return false;
     ret = rec(0, numsSize/2, 0);
     if(!ret)
         return true;
