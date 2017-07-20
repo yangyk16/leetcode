@@ -1,34 +1,22 @@
-bool rec(int* nums, int sizen, int sizem, int sum, int exp) {
-    int i;
-    bool ret;
-    for(i=0;i<=sizen-sizem;i++) {
-        if(sizem == 1)
-            if(sum+nums[i]==exp)
-                return true;
-            else
-                continue;
-        ret = rec(nums+i+1, sizen-1, sizem-1, sum+nums[i], exp);
-        if(ret)
-            return ret;
-    }
-    return false;
-}
 bool canPartition(int* nums, int numsSize) {
-    int sum = 0;
-    int i;
-    bool ret;
-    for(i=0; i<numsSize; i++)
-        sum += nums[i];
-    if(sum & 1)
+    volatile int* array = malloc(pow(2,numsSize)*4);
+    int i,j;
+    int sum=0;
+    for(i=0;i<numsSize;i++)
+        sum+=nums[i];
+    if(sum&1)
         return false;
-    for(i=1; i<=numsSize/2; i++) {
-        ret = rec(nums, numsSize, i, 0, sum/2);
-        if(ret)
-            return ret;
+    else
+        sum/=2;
+    for(i=0;i<pow(2,numsSize);i++)
+        array[i]=0;
+    for(i=0;i<numsSize;i++) {
+        int jmax = pow(2, i);
+        for(j=0;j<jmax;j++) {
+            array[j+jmax-1]=array[j]+nums[i];
+            if(array[j+jmax-1] == sum)
+                return true;
+        }
     }
     return false;
 }
-
-
-
-//code efficient of recurrent is low. maybe use DP
