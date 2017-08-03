@@ -1,0 +1,41 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+typedef struct TreeNode node;
+int recursion(node* root, int useroot)
+{
+    int retl = 0, retr = 0;
+    int retln = 0, retrn = 0;
+    if(useroot) {
+        if(root->left)
+            retln = recursion(root->left, 0);
+        if(root->right)
+            retrn = recursion(root->right, 0);
+        return retln + retrn + root->val;
+    } else {
+        if(root->left) {
+            retl = recursion(root->left, 1);
+            retln = recursion(root->left, 0);
+        }
+        if(root->right) {
+            retr = recursion(root->right, 1);
+            retrn = recursion(root->right, 0);
+        }
+        retl = retl>retln?retl:retln;
+        retr = retr>retrn?retr:retrn;
+        return retl + retr;
+    }
+}
+int rob(struct TreeNode* root) {
+    int ret1, ret2;
+    if(!root)
+        return 0;
+    ret1 = recursion(root, 1);
+    ret2 = recursion(root, 0);
+    return ret1>ret2?ret1:ret2;
+}
